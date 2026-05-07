@@ -1,0 +1,738 @@
+% ============================================================
+%  晶体生物（Crystal Critters）中期报告答辩  Beamer 演示文稿
+%  第2组  楼瓒 / 罗天宇 / 方正
+%
+%  编译方式：xelatex（需 CTeX 宏包支持中文）
+%  图片目录：./photos/  （将实验图片放入该目录后取消对应注释）
+% ============================================================
+\documentclass[aspectratio=169, 12pt]{beamer}
+
+% ---------- 中文支持 ----------
+\usepackage[UTF8, fontset=adobe]{ctex}
+
+% ---------- 主题与配色 ----------
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}          % 去掉导航图标
+\setbeamertemplate{footline}[frame number]        % 仅显示页码
+
+% ---------- 常用宏包 ----------
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, fit}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{xcolor}
+
+% ---------- 颜色定义 ----------
+\definecolor{pkublue}{RGB}{0,55,139}
+\definecolor{pkured}{RGB}{188,0,45}
+\definecolor{lightgray}{RGB}{240,240,240}
+
+\setbeamercolor{frametitle}{bg=pkublue, fg=white}
+\setbeamercolor{title}{fg=pkublue}
+\setbeamercolor{structure}{fg=pkublue}
+
+% ---------- 自定义命令 ----------
+\newcommand{\imgbox}[2]{%          空图占位框
+  \begin{tikzpicture}
+    \draw[dashed, gray, thick] (0,0) rectangle (#1,#2);
+    \node[gray] at (#1/2, #2/2) {\scriptsize [图片待填充]};
+  \end{tikzpicture}%
+}
+
+% ---------- 文档信息 ----------
+\title{\textbf{晶体生物（Crystal Critters）\\ 中期考核报告}}
+\subtitle{NaCl液滴在温暖疏水表面的蒸发-结晶行为}
+\author{第2组\quad 楼瓒 \quad 罗天宇 \quad 方正}
+\institute{北京大学}
+\date{2026年春季}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ──────────────────────────────────────────────────────────────
+%  P1  封面
+% ──────────────────────────────────────────────────────────────
+\begin{frame}[plain]
+  \begin{columns}[c]
+    \column{0.62\textwidth}
+      \vspace{1em}
+      {\usebeamercolor[fg]{title}\LARGE\bfseries 晶体生物（Crystal Critters）}\\[0.5em]
+      {\large 中期考核报告}\\[1em]
+      {\normalsize NaCl液滴在温暖疏水表面的蒸发-结晶行为}\\[1.5em]
+      \hrule\vspace{0.8em}
+      \begin{tabular}{ll}
+        \textbf{小组成员} & 楼瓒 \quad 罗天宇 \quad 方正 \\
+        \textbf{组别}     & 第2组 \\
+        \textbf{单位}     & 北京大学 \\
+        \textbf{日期}     & 2026年春季 \\
+      \end{tabular}
+    \column{0.35\textwidth}
+      \centering
+      % 【图片】代表性"晶体生物"实拍照片（约 5cm×6cm）
+      % 请将图片放入 photos/ 目录后取消下一行注释并删除占位框
+      % \includegraphics[width=\linewidth]{photos/jt1.jpg}
+      \imgbox{4.5}{5.5}\\
+      {\tiny 晶体生物代表图}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P2  汇报结构
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{汇报结构}
+  \begin{columns}[c]
+    \column{0.42\textwidth}
+      \tableofcontents[hideallsubsections]
+    \column{0.55\textwidth}
+      \centering
+      \begin{tikzpicture}[
+          box/.style={draw=pkublue, fill=pkublue!10, rounded corners,
+                      minimum width=3cm, minimum height=0.75cm,
+                      font=\small\bfseries, align=center},
+          arr/.style={-Stealth, thick, pkublue}
+        ]
+        \node[box] (a) {题目重述};
+        \node[box, below=0.4cm of a] (b) {初步探究};
+        \node[box, below=0.4cm of b] (c) {理论 \& 实验};
+        \node[box, below=0.4cm of c] (d) {结论与展望};
+        \draw[arr] (a)--(b);
+        \draw[arr] (b)--(c);
+        \draw[arr] (c)--(d);
+      \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+\section{题目重述}
+
+% ──────────────────────────────────────────────────────────────
+%  P3  题目重述：现象与目标
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{题目重述：现象与目标}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \textbf{赛题原文（IYPT）}\\[0.4em]
+      \begin{block}{}
+        \small Observe the evaporation of a drop of table salt
+        solution on a warm hydrophobic surface. After the water
+        evaporates, a variety of characteristic crystal shapes
+        remain. Research and explain this phenomenon.
+      \end{block}
+      \vspace{0.6em}
+      \textbf{核心观察}
+      \begin{itemize}
+        \item 食盐水滴在疏水面上蒸发后留下\textbf{多样晶体形态}
+        \item 出现可"行走"、"翻滚"的\textbf{晶体生物}结构
+        \item 晶体具有\textbf{腿状支撑结构}，将液滴抬离基底
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{研究目标}：建立完整的机理模型，解释形态多样性
+    \column{0.45\textwidth}
+      \centering
+      % 【图片】蒸发前后对比图（左：液滴，右：晶体生物终态）
+      % \includegraphics[width=\linewidth]{photos/对比图.jpg}
+      \imgbox{5.5}{4.2}\\
+      {\tiny 蒸发前（左）→ 蒸发后晶体生物（右）}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P4  研究问题与核心变量
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{研究问题与核心变量}
+  \begin{columns}[T]
+    \column{0.62\textwidth}
+      \begin{block}{Q1：为何优先边缘成核？}
+        蒸发通量边缘奇异性 → 径向流 → 溶质边缘富集
+      \end{block}
+      \vspace{0.3em}
+      \begin{block}{Q2：为何出现"腿"并抬升液滴？}
+        局部缺陷成核 → 中空管状腿扩散驱动生长
+      \end{block}
+      \vspace{0.3em}
+      \begin{block}{Q3：为何发生倾倒/定向行为？}
+        非同步成核或温度梯度 → 不对称生长 → 力矩失稳
+      \end{block}
+    \column{0.35\textwidth}
+      \centering
+      \textbf{关键控制变量}\\[0.5em]
+      \begin{tabular}{cl}
+        \toprule
+        符号 & 含义 \\
+        \midrule
+        $V$  & 液滴体积 \\
+        $T$  & 基底温度 \\
+        $C$  & 溶液浓度 \\
+        $S$  & 表面类型 \\
+        \bottomrule
+      \end{tabular}\\[1em]
+      % 【图片】变量示意图（可用示意图说明各变量作用）
+      % \includegraphics[width=0.9\linewidth]{photos/变量示意.jpg}
+      \imgbox{3.5}{2.5}\\
+      {\tiny 变量示意图}
+  \end{columns}
+\end{frame}
+
+\section{初步探究}
+
+% ──────────────────────────────────────────────────────────────
+%  P5  初步探究：三阶段框架
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{初步探究：三阶段机理框架}
+  \begin{center}
+  \begin{tikzpicture}[
+      stage/.style={draw=pkublue, fill=pkublue!10, rounded corners=5pt,
+                    minimum width=3.2cm, minimum height=1.2cm,
+                    font=\small\bfseries, align=center},
+      arr/.style={-Stealth, thick, pkublue, line width=1.2pt}
+    ]
+    \node[stage] (s1) {阶段①\\溶剂蒸发\\溶质富集};
+    \node[stage, right=1.6cm of s1] (s2) {阶段②\\晶体"腿"\\生长};
+    \node[stage, right=1.6cm of s2] (s3) {阶段③\\非对称后续\\变化};
+    \draw[arr] (s1)--(s2);
+    \draw[arr] (s2)--(s3);
+    % 文献标注
+    \node[below=0.15cm of s1, font=\tiny, gray] {Deegan'97; Hu'02};
+    \node[below=0.15cm of s2, font=\tiny, gray] {Shahidzadeh'15};
+    \node[below=0.15cm of s3, font=\tiny, gray] {McBride'21};
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \column{0.31\textwidth}
+      \centering
+      % 【图片】阶段①代表图（液滴+边缘析晶）
+      % \includegraphics[width=\linewidth]{photos/gc1.jpg}
+      \imgbox{3.5}{2.5}\\
+      {\tiny 蒸发与溶质富集}
+    \column{0.31\textwidth}
+      \centering
+      % 【图片】阶段②代表图（腿生长过程帧）
+      % \includegraphics[width=\linewidth]{photos/gc2.jpg}
+      \imgbox{3.5}{2.5}\\
+      {\tiny 晶体腿生长}
+    \column{0.31\textwidth}
+      \centering
+      % 【图片】阶段③代表图（倾倒/抬升结果）
+      % \includegraphics[width=\linewidth]{photos/gc3.jpg}
+      \imgbox{3.5}{2.5}\\
+      {\tiny 非对称后续变化}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P6  初步探究：表面差异对比
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{初步探究：表面差异观察}
+  \begin{columns}[T]
+    \column{0.31\textwidth}
+      \centering
+      \textbf{荷叶表面}\\
+      % 【图片】荷叶表面液滴接触角图
+      % \includegraphics[width=\linewidth]{photos/hyd.jpg}
+      \imgbox{3.5}{3.0}\\[0.3em]
+      {\small 均相成核主导\\顶部结晶，\textbf{无腿}}
+    \column{0.31\textwidth}
+      \centering
+      \textbf{烟炱表面}\\
+      % 【图片】烟炱表面液滴接触角图
+      % \includegraphics[width=\linewidth]{photos/yyd.jpg}
+      \imgbox{3.5}{3.0}\\[0.3em]
+      {\small Cassie-Baxter态\\复合界面，\textbf{无腿}}
+    \column{0.31\textwidth}
+      \centering
+      \textbf{人工疏水面}\\
+      % 【图片】人工疏水面晶体生物结果图
+      % \includegraphics[width=\linewidth]{photos/jt1.jpg}
+      \imgbox{3.5}{3.0}\\[0.3em]
+      {\small 有效异质成核\\出现\textbf{腿部结构}}
+  \end{columns}
+  \vspace{0.5em}
+  \begin{block}{\small 初步判断}
+    \small 成核位点与固-液界面微结构决定是否形成腿；接触角范围均在 120°–130°，但成核机制不同。
+  \end{block}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P7  初步探究：形态分类
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{初步探究：晶体形态分类}
+  \begin{columns}[T]
+    \column{0.70\textwidth}
+      \begin{tabular}{cc}
+        % 图1
+        \begin{minipage}[t]{0.44\linewidth}
+          \centering
+          % 【图片】层状腿纹理
+          % \includegraphics[width=\linewidth]{photos/jt1.jpg}
+          \imgbox{3.3}{2.6}\\
+          {\scriptsize ①层状腿纹理}
+        \end{minipage}
+        &
+        % 图2
+        \begin{minipage}[t]{0.44\linewidth}
+          \centering
+          % 【图片】半球封顶晶体
+          % \includegraphics[width=\linewidth]{photos/jt3.jpg}
+          \imgbox{3.3}{2.6}\\
+          {\scriptsize ②半球封顶}
+        \end{minipage}
+        \\[0.8em]
+        % 图3
+        \begin{minipage}[t]{0.44\linewidth}
+          \centering
+          % 【图片】环状中空晶体
+          % \includegraphics[width=\linewidth]{photos/jt11.jpg}
+          \imgbox{3.3}{2.6}\\
+          {\scriptsize ③环状中空}
+        \end{minipage}
+        &
+        % 图4
+        \begin{minipage}[t]{0.44\linewidth}
+          \centering
+          % 【图片】倾倒/非对称晶体
+          % \includegraphics[width=\linewidth]{photos/jt7.jpg}
+          \imgbox{3.3}{2.6}\\
+          {\scriptsize ④倾倒非对称}
+        \end{minipage}
+      \end{tabular}
+    \column{0.28\textwidth}
+      \vspace{0.5em}
+      \begin{itemize}
+        \setlength\itemsep{0.6em}
+        \item[\textcolor{pkublue}{\textbf{①}}] "停顿-铺展"循环 → 周期纹
+        \item[\textcolor{pkublue}{\textbf{②}}] 高浓度：顶部界面早封顶
+        \item[\textcolor{pkublue}{\textbf{③}}] 低浓度/边缘为主：环状
+        \item[\textcolor{pkublue}{\textbf{④}}] 非同步成核 → 重心偏移
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+\section{理论 \& 实验}
+
+% ──────────────────────────────────────────────────────────────
+%  P8  理论总览
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{理论总览：输入–过程–输出}
+  \begin{center}
+  \begin{tikzpicture}[
+      box/.style={draw=pkublue, fill=pkublue!8, rounded corners=4pt,
+                  minimum width=2.8cm, minimum height=1.8cm,
+                  font=\small, align=center},
+      pbox/.style={draw=pkured!70, fill=pkured!8, rounded corners=4pt,
+                   minimum width=8cm, minimum height=1.0cm,
+                   font=\small\bfseries, align=center},
+      arr/.style={-Stealth, thick, pkublue, line width=1.2pt}
+    ]
+    % 输入
+    \node[box] (inp) {
+      \textbf{输入}\\[4pt]
+      $V,\;T,\;C$\\
+      表面微结构};
+    % 过程
+    \node[box, right=0.8cm of inp, minimum width=5.0cm] (proc) {
+      \textbf{过程}\\[4pt]
+      蒸发通量 $J(r)$ $\to$ 径向流\\
+      $\to$ 边缘成核/沉积 $\to$ 腿生长\\
+      $\to$ 不对称 $\to$ 力学失稳};
+    % 输出
+    \node[box, right=0.8cm of proc] (out) {
+      \textbf{输出}\\[4pt]
+      形态多样性\\
+      运动行为};
+    \draw[arr] (inp)--(proc);
+    \draw[arr] (proc)--(out);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{0.3em}
+  \begin{columns}[T]
+    \column{0.32\textwidth}
+      \centering\textcolor{pkublue}{\textbf{理论1}}\\
+      蒸发富集\\与边缘成核
+    \column{0.32\textwidth}
+      \centering\textcolor{pkublue}{\textbf{理论2}}\\
+      腿生长\\速度模型
+    \column{0.32\textwidth}
+      \centering\textcolor{pkublue}{\textbf{理论3}}\\
+      非对称生长\\力矩失稳
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P9  理论1：蒸发富集与边缘成核
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{理论1：蒸发富集与边缘成核}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \textbf{蒸发通量奇异性}（Deegan et al. 1997）
+      \[
+        J(r) \propto (R-r)^{-\lambda},\quad
+        \lambda = \frac{\pi - 2\theta}{2\pi - 2\theta}
+      \]
+      \vspace{0.3em}
+      \textbf{径向平均流速}（Hu \& Larson 2002）
+      \[
+        \bar{u}_r(\tilde{r}) = \frac{1}{4\tilde{r}}
+        \left[(1-\tilde{r}^2)^{-\lambda} - (1-\tilde{r}^2)\right]
+      \]
+      \vspace{0.4em}
+      \textbf{物理图像}
+      \begin{itemize}
+        \item 边缘蒸发最快 $\Rightarrow$ 径向补偿流
+        \item 盐分被输运至接触线 $\Rightarrow$ 边缘优先过饱和
+        \item 第一批晶核在接触线析出 $\Rightarrow$ 成为"腿"的生长点
+      \end{itemize}
+    \column{0.45\textwidth}
+      \centering
+      % 【图片】液滴截面示意：流线 + 边缘富集示意图
+      % 可用绘图软件或 TikZ 自行绘制，或截取文献图
+      \imgbox{5.5}{4.5}\\
+      {\tiny 液滴内径向流 \& 边缘溶质富集示意}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P10  理论2：腿生长模型
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{理论2：晶体"腿"生长速度模型}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \textbf{模型假设}：$N$ 条中空管状腿，外径 $R_o$，内径 $R_i$，高度 $h$
+      \vspace{0.5em}
+
+      \textbf{蒸发驱动}（扩散限制）
+      \[
+        \frac{\mathrm{d}V}{\mathrm{d}t} = -2\pi R_o N J_o
+      \]
+
+      \textbf{质量守恒联立}（盐沉积 = 蒸发带走）
+      \[
+        \frac{\mathrm{d}M_s}{\mathrm{d}t} = \rho_c N\pi(R_o^2-R_i^2)\frac{\mathrm{d}h}{\mathrm{d}t}
+      \]
+
+      \textbf{腿生长速度}（与腿数 $N$ 无关！）
+      \[
+        \boxed{v_{\rm grow} = \frac{2R_o}{R_o^2-R_i^2}\cdot\frac{C_{\rm sat}J_o}{\rho_c}}
+      \]
+
+      \vspace{0.3em}
+      {\small $\Rightarrow$ 多条腿可\textbf{同步生长}，协同抬升液滴}
+    \column{0.45\textwidth}
+      \centering
+      % 【图片】中空腿截面示意图（Ro, Ri 标注）+ 实拍腿图
+      \imgbox{5.0}{3.5}\\
+      {\tiny 中空管状腿截面示意}\\[0.5em]
+      % 【图片】腿部实拍特写
+      % \includegraphics[width=0.9\linewidth]{photos/jt5.jpg}
+      \imgbox{5.0}{2.5}\\
+      {\tiny 实拍：腿部结构}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P11  理论3：非对称生长与力矩失稳
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{理论3：非对称生长与倾倒机制}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \textbf{温差引起蒸发差异}（Clausius-Clapeyron）
+      \[
+        J_o(T) \propto \exp\!\left(-\frac{L}{RT}\right)
+      \]
+
+      \textbf{倾角随时间增大}
+      \[
+        \frac{\mathrm{d}\alpha}{\mathrm{d}t} \approx
+        \frac{v_{\rm high} - v_{\rm low}}{L_{\rm legs}}
+      \]
+
+      \textbf{重力力矩}
+      \[
+        M_g = mgR_{\rm globe}\sin\alpha
+      \]
+
+      \vspace{0.4em}
+      \textbf{倾倒条件}：$\alpha > \alpha_c$ 时，疏水面低粘附力
+      无法平衡力矩 $\Rightarrow$ 翻滚/倾倒\\[0.4em]
+
+      \textbf{随机成核情形}：第一根腿随机出现
+      $\Rightarrow$ 重心偏移 $\Rightarrow$ 非同步成核 $\Rightarrow$ 倾斜
+    \column{0.45\textwidth}
+      \centering
+      % 【图片】倾角 + 重心位置示意图（力学图解）
+      \imgbox{5.2}{3.5}\\
+      {\tiny 倾角 $\alpha$ 与重力力矩示意}\\[0.5em]
+      % 【图片】实验中倾倒晶体照片
+      % \includegraphics[width=0.9\linewidth]{photos/jt9.jpg}
+      \imgbox{5.2}{2.5}\\
+      {\tiny 实拍：晶体倾倒现象}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P12  实验设计：样品与装置
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{实验设计：样品制备与装置}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \centering
+      % 【图片】实验装置实拍图（加热台+摄像头+液滴）
+      % \includegraphics[width=0.9\linewidth]{photos/syzz.jpg}
+      \imgbox{5.8}{4.5}\\
+      {\tiny 实验装置实拍图}
+    \column{0.48\textwidth}
+      \textbf{三类疏水基底}
+      \begin{enumerate}
+        \item \textbf{荷叶}：天然纳米蜡质乳突，固定于载玻片
+        \item \textbf{烟炱面}：蜡烛不完全燃烧，碳纳米颗粒沉积
+        \item \textbf{人工疏水面}：商业疏水膜，粘于载玻片
+      \end{enumerate}
+      \vspace{0.6em}
+      \textbf{测量系统}
+      \begin{itemize}
+        \item 温控台：$\pm 1\,^\circ\mathrm{C}$，范围 $40\text{–}80\,^\circ\mathrm{C}$
+        \item 侧向微距摄像：接触角、腿高、形态演化
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{测得疏水角}：120°–130°（三类表面均达到）
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P13  实验流程与参数矩阵
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{实验流程与参数矩阵}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+      \textbf{实验流程}\\[0.3em]
+      \begin{tikzpicture}[
+          step/.style={draw=pkublue, fill=pkublue!10, rounded corners=4pt,
+                       minimum width=3.6cm, minimum height=0.65cm,
+                       font=\small, align=center},
+          arr/.style={-Stealth, pkublue, thick}
+        ]
+        \node[step] (a) {① 疏水基底固定于加热台};
+        \node[step, below=0.25cm of a] (b) {② 预热至目标温度};
+        \node[step, below=0.25cm of b] (c) {③ 移液枪精准滴液};
+        \node[step, below=0.25cm of c] (d) {④ 录像至完全蒸发};
+        \node[step, below=0.25cm of d] (e) {⑤ 更换参数，重复};
+        \draw[arr] (a)--(b); \draw[arr] (b)--(c);
+        \draw[arr] (c)--(d); \draw[arr] (d)--(e);
+      \end{tikzpicture}
+    \column{0.50\textwidth}
+      \textbf{参数矩阵}\\[0.3em]
+      \begin{tabular}{lll}
+        \toprule
+        参数 & 取值 & 备注 \\
+        \midrule
+        体积 $V$ & 40–100 $\mu$L & 移液枪 \\
+        浓度 $C$ & 5\%、15\%、饱和 & 质量分数 \\
+        温度 $T$ & 40–80 °C & 步长 10°C \\
+        表面 $S$ & 荷叶/烟炱/人工 & 各2组 \\
+        \bottomrule
+      \end{tabular}\\[0.8em]
+      % 【图片】滴液过程实拍小图
+      % \includegraphics[width=0.9\linewidth]{photos/滴液.jpg}
+      \imgbox{5.5}{2.2}\\
+      {\tiny 实验过程实拍（可选）}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P14  结果1：结晶过程时序
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{实验结果1：结晶过程时序}
+  \vspace{0.2em}
+  \begin{tikzpicture}
+    \draw[-Stealth, thick, pkublue] (0,0)--(13.5,0)
+      node[right, font=\small]{时间};
+    \foreach \x/\lbl in {1/初始液滴, 4/边缘析晶, 7/腿部生长, 10/抬升中, 13/终态}{
+      \draw[pkublue, thick] (\x,0)--(\x,0.2);
+      \node[above=0.2cm, font=\tiny, align=center] at (\x,0) {\lbl};
+    }
+  \end{tikzpicture}
+  \vspace{0.3em}
+  \begin{columns}[c]
+    \column{0.18\textwidth}
+      \centering
+      % 【图片】gc1.jpg
+      % \includegraphics[width=\linewidth]{photos/gc1.jpg}
+      \imgbox{2.2}{2.2}\\{\tiny t=0s}
+    \column{0.18\textwidth}
+      \centering
+      % 【图片】gc2.jpg
+      % \includegraphics[width=\linewidth]{photos/gc2.jpg}
+      \imgbox{2.2}{2.2}\\{\tiny 边缘析晶}
+    \column{0.18\textwidth}
+      \centering
+      % 【图片】gc3.jpg
+      % \includegraphics[width=\linewidth]{photos/gc3.jpg}
+      \imgbox{2.2}{2.2}\\{\tiny 腿生长}
+    \column{0.18\textwidth}
+      \centering
+      % 【图片】gc4.jpg
+      % \includegraphics[width=\linewidth]{photos/gc4.jpg}
+      \imgbox{2.2}{2.2}\\{\tiny 抬升}
+    \column{0.18\textwidth}
+      \centering
+      % 【图片】jt1.jpg 终态
+      % \includegraphics[width=\linewidth]{photos/jt1.jpg}
+      \imgbox{2.2}{2.2}\\{\tiny 终态}
+  \end{columns}
+  \vspace{0.3em}
+  \begin{block}{\small 对应三阶段}
+    \small 时序完整展现了：蒸发富集（边缘析晶）→ 腿生长抬升 → 最终形态固化。
+  \end{block}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P15  结果2：形态结果与机制解释
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{实验结果2：形态结果与机制解释}
+  \begin{columns}[T]
+    \column{0.40\textwidth}
+      % 图1
+      \centering
+      % 【图片】层状腿
+      % \includegraphics[width=0.9\linewidth]{photos/jt5.jpg}
+      \imgbox{4.5}{1.8}\\{\tiny 层状纹理}\\[0.3em]
+      % 图2
+      % 【图片】封顶 vs 中空
+      % \includegraphics[width=0.9\linewidth]{photos/jt3.jpg}
+      \imgbox{4.5}{1.8}\\{\tiny 封顶（左）vs 中空（右）}\\[0.3em]
+      % 图3
+      % 【图片】倾倒
+      % \includegraphics[width=0.9\linewidth]{photos/jt7.jpg}
+      \imgbox{4.5}{1.8}\\{\tiny 倾倒现象}
+    \column{0.57\textwidth}
+      \renewcommand{\arraystretch}{1.4}
+      \begin{tabular}{lp{5cm}}
+        \toprule
+        \textbf{现象} & \textbf{机制解释} \\
+        \midrule
+        层状纹理 & 液体"停顿-铺展"循环；或腿达到临界强度后液面突变 \\
+        \midrule
+        半球封顶 & 高浓度：顶部气-液界面优先成核，针状晶封顶 \\
+        \midrule
+        环状中空 & 低/中浓度：溶质以边缘输运为主，顶部未封 \\
+        \midrule
+        倾倒 & 非同步成核→重心偏移→不对称加剧→失稳倾倒 \\
+        \bottomrule
+      \end{tabular}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P16  模型–实验对照与误差分析
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{模型–实验对照与误差分析}
+  \begin{columns}[T]
+    \column{0.31\textwidth}
+      \centering\textcolor{pkublue}{\textbf{模型吻合}}\\[0.4em]
+      \begin{itemize}
+        \item 边缘优先析晶 ✓
+        \item 腿速与 $N$ 无关 ✓
+        \item 温差→定向行为 ✓
+        \item 高浓度→封顶 ✓
+      \end{itemize}
+    \column{0.31\textwidth}
+      \centering\textcolor{pkured}{\textbf{尚未解释}}\\[0.4em]
+      \begin{itemize}
+        \item 局部缺陷诱导成核细节
+        \item 层状纹理周期定量
+        \item 盐球（salt globe）形态
+        \item 腿内溶液上升机制
+      \end{itemize}
+    \column{0.31\textwidth}
+      \centering\textcolor{gray}{\textbf{误差来源}}\\[0.4em]
+      \begin{itemize}
+        \item 温控精度 $\pm 1\,^\circ$C
+        \item 表面制备一致性
+        \item 接触角测量标定
+        \item 液滴体积误差
+      \end{itemize}
+  \end{columns}
+  \vspace{0.8em}
+  \centering
+  % 【图片】可放定量对比图或误差棒图（如腿高随温度变化）
+  % \includegraphics[width=0.6\linewidth]{photos/误差图.pdf}
+  \imgbox{8}{2.0}\\
+  {\tiny 定量对比图或误差统计图（待填充）}
+\end{frame}
+
+\section{结论与展望}
+
+% ──────────────────────────────────────────────────────────────
+%  P17  结论
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{结论}
+  \begin{columns}[T]
+    \column{0.65\textwidth}
+      \begin{enumerate}
+        \setlength\itemsep{0.8em}
+        \item \textbf{建立了三阶段机理框架}\\
+              {\small 蒸发富集→腿生长→非对称演化，可系统解释
+              赛题中多样晶体形态的成因。}
+        \item \textbf{识别了关键控制变量}\\
+              {\small $V$、$T$、$C$ 及表面类型共同决定结晶速率与
+              形态（层状/封顶/中空/倾倒）。}
+        \item \textbf{给出可量化的腿生长模型}\\
+              {\small $v_{\rm grow}$ 与腿数 $N$ 无关，解释了多腿
+              同步抬升；非对称失稳触发倾倒行为。}
+      \end{enumerate}
+    \column{0.32\textwidth}
+      \centering
+      % 【图片】最具代表性的晶体生物成品图
+      % \includegraphics[width=\linewidth]{photos/jt1.jpg}
+      \imgbox{3.8}{5.5}\\
+      {\tiny 最佳结果图}
+  \end{columns}
+\end{frame}
+
+% ──────────────────────────────────────────────────────────────
+%  P18  展望与 Q&A
+% ──────────────────────────────────────────────────────────────
+\begin{frame}{展望与 Q\&A}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+      \textbf{下一步研究方向}
+      \begin{enumerate}
+        \setlength\itemsep{0.6em}
+        \item \textbf{温度梯度定向控制实验}\\
+              {\small 定量验证温度梯度与晶体"行走"方向的关系}
+        \item \textbf{表面微结构与异质成核量化}\\
+              {\small 引入接触角滞后、局部缺陷密度等参量建模}
+        \item \textbf{数值模拟}\\
+              {\small 流场模拟（LBM/SPH）或相场模型重现各形态}
+      \end{enumerate}
+    \column{0.45\textwidth}
+      \vspace{1.5em}
+      \centering
+      {\LARGE\bfseries\color{pkublue} Thank You!}\\[1em]
+      {\large Q \& A}\\[1.5em]
+      % 【图片】收尾图（如整齐排列的多个晶体生物）
+      % \includegraphics[width=0.9\linewidth]{photos/heye.jpg}
+      \imgbox{5.0}{3.5}\\
+      {\tiny 实验结果收尾图}
+  \end{columns}
+\end{frame}
+
+% ============================================================
+%  参考文献
+% ============================================================
+\begin{frame}[allowframebreaks]{参考文献}
+  \small
+  \begin{thebibliography}{99}
+    \bibitem{deegan1997} Deegan, R.~D., et al. (1997). Capillary flow as the cause of ring stains from dried liquid drops. \textit{Nature}, 389, 827–829.
+    \bibitem{hu2002} Hu, H., \& Larson, R.~G. (2002). Evaporation of a sessile droplet on a substrate. \textit{J.~Phys.~Chem.~B}, 106, 1334–1344.
+    \bibitem{shahidzadeh2015} Shahidzadeh, N., et al. (2015). Salt stains from evaporating droplets. \textit{Scientific Reports}, 5, 10335.
+    \bibitem{mcbride2021} McBride, S.~A., Girard, H.~L., \& Varanasi, K.~K. (2021). Crystal critters: Self-ejection of crystals from heated, superhydrophobic surfaces. \textit{Science Advances}, 7(18), eabe6960.
+    \bibitem{yu2012} Yu, Y.~S., et al. (2012). Evaporation of sessile droplets on solid surfaces. \textit{J.~Phys.~Chem.~C}, 116, 1234–1240.
+  \end{thebibliography}
+\end{frame}
+
+\end{document}
