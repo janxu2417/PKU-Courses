@@ -23,6 +23,14 @@ xelatex presentation.tex   # 第二次确保引用正确
 在 `photos/` 目录下放入以下图片，并在 `presentation.tex`
 中找到对应注释行，取消注释（删除 `%`）即可：
 
+示例（以 `gc3.jpg` 为例）：
+
+```tex
+\includegraphics[width=\linewidth]{photos/gc3.jpg}
+```
+
+注意不要多写花括号、不要把路径写到正文里，也不要保留行首的 `%` 注释符号。
+
 | 文件名        | 位置（幻灯片页）      | 说明                     |
 |---------------|-----------------------|--------------------------|
 | `jt1.jpg`     | P1 封面、P10、P17     | 代表性晶体生物实拍       |
@@ -38,6 +46,32 @@ xelatex presentation.tex   # 第二次确保引用正确
 | `jt9.jpg`     | P11                   | 倾倒实拍                 |
 | `jt11.jpg`    | P7、P15               | 环状中空晶体             |
 | `syzz.jpg`    | P12                   | 实验装置实拍             |
+
+## Overleaf 中只显示 `photos/gc3.jpg` 文字时如何排查
+
+如果 PDF 里只出现文件名而没有图片，通常按下面顺序检查：
+
+1. **确认图片已经上传到 Overleaf 项目中**
+   - 左侧文件树里应能看到 `photos/gc3.jpg`。
+   - 如果没有 `photos/` 文件夹，请先在 Overleaf 中创建 `photos`，再上传图片。
+
+2. **检查文件名大小写是否完全一致**
+   - Overleaf 运行在 Linux 环境，路径**区分大小写**。
+   - `photos/gc3.jpg`、`photos/GC3.jpg`、`Photos/gc3.jpg` 会被视为不同文件。
+
+3. **检查 LaTeX 语法是否正确**
+   - 正确写法：
+     ```tex
+     \includegraphics[width=\linewidth]{photos/gc3.jpg}
+     ```
+   - 常见错误：
+     - 忘记去掉前面的 `%`
+     - 把路径写成普通文本
+     - 文件扩展名或路径拼错
+
+4. **如果只显示文件名而不是报错，再检查是否开启了 draft 模式**
+   - 这通常是 `draft`/快速草稿编译时的典型现象。
+   - 在 Overleaf 里关闭 `Fast [draft]` 编译，或确保文档类、`graphicx` 没有启用 `draft` 选项后重新编译。
 
 对于没有实拍图的机制示意图位（如 P9 径向流示意、P10 截面示意、P11 力矩示意），
 建议用 PowerPoint/Keynote 在 PDF 导出后叠加，或用 TikZ/Inkscape 自绘。
