@@ -6,7 +6,7 @@ Rayleigh–Schrödinger 微扰论（RSPT）求解工具箱：任意阶**非简�
 | --- | --- |
 | 版本 | 1.2.0 |
 | 依赖 | Python ≥ 3.9。安装项目时按 `pyproject.toml` 安装 NumPy、SciPy、Matplotlib、mpmath 和 SymPy |
-| 课程作业 | [作业报告.md](作业报告.md) 汇总算法、讲义三个例题和复现命令 |
+| 课程作业 | 本地 `作业报告.md` 汇总算法、讲义三个例题和复现命令（过程文档，未随仓库发布） |
 | 扩展演示 | `python run_all.py` 生成自包含 `report.html`，含四次非谐振子等额外模型 |
 
 ## 特性
